@@ -20,7 +20,9 @@ function divide(a,b) {
 
 // Declares operator and numbers where we will store them.
 let operator = "";
-let numbersPair;
+let numbersPair = [];
+// declare counter clicks after operator button was pressed.
+let clickCounter = 1
 
 // Create const for results div.
 const results = document.getElementById("results")
@@ -33,19 +35,50 @@ clearButton.onclick = function() {results.textContent = ""}
 const numberPad = document.getElementsByClassName("number");
 for (let i = 0; i < numberPad.length; i++) {
   numberPad[i].onclick = function() {
-    if (operator != "") {results.innerHTML = ""}
+    // clears results div when a second number is entered.
+    if ((operator != "" || operator == "=") && clickCounter < 1) {results.textContent = ""}
     results.textContent += `${numberPad[i].textContent}`
+    clickCounter++
   }
 }
 
 // Adds event when operator is click on.
 const operatorButton = document.getElementsByClassName("operator")
-operatorButton.onclick = function() {numbersPair[0] = results.textContent}
+for (let i = 0; i < operatorButton.length; i++) {
+  operatorButton[i].onclick = function() {
+    numbersPair[numbersPair.length] = parseInt(results.textContent, 10)
+    operatorButton[i].style.setProperty("background-color", "blue")
+    if (operator == "" || operator == "=") {operator = operatorButton[i].id;}
+    clickCounter = 0;
+  }
+}
+
+//  Resets operations
+function reset() {
+  numbersPair = [];
+  for (let i = 0; i < operatorButton.length; i++) {
+    operatorButton[i].style.setProperty("background-color", "")
+  }
+}
+
+// Adds event to equal operator.
+const equalButton = document.getElementById("=")
+equalButton.onclick = function() {
+  if (operator == "" || operator == "="){return}
+  // Adds last number to array.
+  numbersPair[numbersPair.length] = parseInt(results.textContent, 10)
+  results.textContent = `${operate(operator, numbersPair[0], numbersPair[1])}`
+  reset();
+  operator = "=";
+  clickCounter = 0;
+}
 
 // Takes operator and calls corresponding function-operation above for a and b.
 function operate(operator, a, b) {
-  if (operator == "+") { add(a,b) }
-  else if (operator == "-") { substract(a,b) }
-  else if (operator == "*") { substract(a,b) }
-  else if (operator == "/") { substract(a,b) }
+  if (operator == "+") { return add(a,b) }
+  else if (operator == "-") { return substract(a,b) }
+  else if (operator == "*") { return multiply(a,b) }
+  else if (operator == "/") { return divide(a,b) }
 }
+
+// features to add: prevent user from clicking an operator twice in a row.
