@@ -94,3 +94,11 @@ body {
   gap: 10px 10px;
 }
 
+.extraButtons {
+  border: black 3px solid;
+}
+
+button:hover {
+  background-color: grey;
+  border-width: 5px;
+}

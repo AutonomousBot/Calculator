@@ -29,7 +29,10 @@ const results = document.getElementById("results")
 
 // Adds event to clear button which will make the results div empty.
 const clearButton = document.getElementById("clear");
-clearButton.onclick = function() {results.textContent = ""}
+clearButton.onclick = function() {
+  results.textContent = ""
+  reset();
+}
 
 // Adds numbers when buttons are clicked to the results div.
 const numberPad = document.getElementsByClassName("number");
@@ -81,4 +84,12 @@ function operate(operator, a, b) {
   else if (operator == "/") { return divide(a,b) }
 }
 
-// features to add: prevent user from clicking an operator twice in a row.
+// Adds event to backspace button.
+const backspace = document.getElementById("backspace")
+backspace.onclick = function() {
+  if (results.textContent.length > 0) {
+    results.textContent = results.textContent.slice(0,-1)
+  }
+}
+
+// features to add: prevent user from clicking an operator twice in a row. Add decimal and backspace.
