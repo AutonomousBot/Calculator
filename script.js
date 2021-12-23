@@ -112,15 +112,15 @@ function operate(operator, a, b) {
 }
 
 // Adds event to backspace button.
-const backspace = document.getElementById("backspace")
-backspace.onclick = function() { 
+const backspace = document.getElementById("Backspace")
+backspace.onclick = function() {
   if (results.textContent.length > 0) {
     results.textContent = results.textContent.slice(0,-1)
   }
 }
 
 // Adds event to decimal key.
-const decimal = document.getElementById("decimal")
+const decimal = document.getElementById(".")
 decimal.onclick = function() {
   if (results.textContent == "") {results.textContent = "0."}
   // prevents user from inputting multiple decimals for a single number.
@@ -139,3 +139,15 @@ function arrayFloat(text) {
 function isFloat(number) {
   return number % 1 != 0;
 }
+
+// Adds keyboard support.
+let regexOperators = /[.\d\*\\\+\=\-]/
+document.addEventListener('keydown', (event) => {
+  let name = event.key;
+  if ((new RegExp("Backspace")).test(name) || regexOperators.test(name)) {
+    document.getElementById(`${name}`).click();
+    console.log("yo")
+  }
+  if (name == "Enter") {document.getElementById("=").click();}
+  if (name == "c") {document.getElementById("clear").click();}
+})
