@@ -34,6 +34,9 @@ clearButton.onclick = function() {
   reset();
 }
 
+// Declares operator button.
+const operatorButton = document.getElementsByClassName("operator")
+
 // Adds numbers when buttons are clicked to the results div.
 const numberPad = document.getElementsByClassName("number");
 for (let i = 0; i < numberPad.length; i++) {
@@ -41,18 +44,38 @@ for (let i = 0; i < numberPad.length; i++) {
     // clears results div when a second number is entered.
     if ((operator != "" || operator == "=") && clickCounter < 1) {results.textContent = ""}
     results.textContent += `${numberPad[i].textContent}`
+    // Prevents user from clicking operator without numbers between.
+    for (let i = 0; i < operatorButton.length; i++) {
+      operatorButton[i].disabled = false;
+    }
     clickCounter++
   }
 }
 
 // Adds event when operator is click on.
-const operatorButton = document.getElementsByClassName("operator")
 for (let i = 0; i < operatorButton.length; i++) {
   operatorButton[i].onclick = function() {
-    numbersPair[numbersPair.length] = parseInt(results.textContent, 10)
+    // Resets color every time a new operator is clicked.
+    for (let i = 0; i < operatorButton.length; i++) {
+      operatorButton[i].style.setProperty("background-color", "")
+    }
+    // Adds last number to array. Check for decimal.
+    arrayFloat(results.textContent)
+    // Colors current operator.
     operatorButton[i].style.setProperty("background-color", "blue")
-    if (operator == "" || operator == "=") {operator = operatorButton[i].id;}
+    // Calculates current pair if operator is clicked instead of equal sign.
+    if (numbersPair.length == 2) {
+      results.textContent = `${operate(operator, numbersPair[0], numbersPair[1])}`
+      numbersPair = [];
+      arrayFloat(results.textContent)
+    }
+    // Sets operator to current one.
+    operator = operatorButton[i].id;
     clickCounter = 0;
+    // Prevents user from clicking operator without numbers between.
+    for (let i = 0; i < operatorButton.length; i++) {
+      operatorButton[i].disabled = true;
+    }
   }
 }
 
@@ -61,6 +84,7 @@ function reset() {
   numbersPair = [];
   for (let i = 0; i < operatorButton.length; i++) {
     operatorButton[i].style.setProperty("background-color", "")
+    operatorButton[i].disabled = false;
   }
 }
 
@@ -68,8 +92,8 @@ function reset() {
 const equalButton = document.getElementById("=")
 equalButton.onclick = function() {
   if (operator == "" || operator == "="){return}
-  // Adds last number to array.
-  numbersPair[numbersPair.length] = parseInt(results.textContent, 10)
+  // Adds last number to array. Check for decimal.
+  arrayFloat(results.textContent)
   results.textContent = `${operate(operator, numbersPair[0], numbersPair[1])}`
   reset();
   operator = "=";
@@ -78,18 +102,40 @@ equalButton.onclick = function() {
 
 // Takes operator and calls corresponding function-operation above for a and b.
 function operate(operator, a, b) {
-  if (operator == "+") { return add(a,b) }
-  else if (operator == "-") { return substract(a,b) }
-  else if (operator == "*") { return multiply(a,b) }
-  else if (operator == "/") { return divide(a,b) }
+  let answer;
+  if (operator == "+") { answer = add(a,b) }
+  else if (operator == "-") { answer = substract(a,b) }
+  else if (operator == "*") { answer = multiply(a,b) }
+  else if (operator == "/") { answer = divide(a,b) }
+  if (isFloat(answer)) {return answer.toFixed(4)}
+  return answer;
 }
 
 // Adds event to backspace button.
 const backspace = document.getElementById("backspace")
-backspace.onclick = function() {
+backspace.onclick = function() { 
   if (results.textContent.length > 0) {
     results.textContent = results.textContent.slice(0,-1)
   }
 }
 
-// features to add: prevent user from clicking an operator twice in a row. Add decimal and backspace.
+// Adds event to decimal key.
+const decimal = document.getElementById("decimal")
+decimal.onclick = function() {
+  if (results.textContent == "") {results.textContent = "0."}
+  // prevents user from inputting multiple decimals for a single number.
+  if (!results.textContent.match(/[.]/)) {results.textContent += "."}
+}
+
+function arrayFloat(text) {
+  if (text.match(/[.]/)) {
+    numbersPair[numbersPair.length] = parseFloat(text)
+  }
+  else {
+    numbersPair[numbersPair.length] = parseInt(text, 10)
+  }
+}
+
+function isFloat(number) {
+  return number % 1 != 0;
+}

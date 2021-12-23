@@ -96,6 +96,7 @@ body {
 
 .extraButtons {
   border: black 3px solid;
+  font-size: 30px;
 }
 
 button:hover {
