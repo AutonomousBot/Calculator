@@ -38,6 +38,7 @@ body {
 #results {
   width: 80%;
   height: 40px;
+  font-size: 25px;
 }
 
 #clear {
@@ -61,9 +62,9 @@ body {
   flex-flow: wrap;
 }
 
-.number {
+.number, .extraButtons {
   padding: 20px;
-  height: 80px;
+  height: 73px;
   width: 10px;
   font-size: 30px;
   text-align: center;
@@ -77,7 +78,7 @@ body {
   text-align: center;
   font-size: 30px;
   border: black solid 3px;
-  height: 70px;
+  height: 63px;
 }
 
 
@@ -92,11 +93,6 @@ body {
   padding: 28px;
   flex-grow: 0.5;
   gap: 10px 10px;
-}
-
-.extraButtons {
-  border: black 3px solid;
-  font-size: 30px;
 }
 
 button:hover {

@@ -15,6 +15,7 @@ function multiply(a,b) {
 
 // Function for division
 function divide(a,b) {
+  if (b == 0) {return "3RR0R. Cannot divide by 0."}
   return a/b
 }
 
@@ -37,13 +38,20 @@ clearButton.onclick = function() {
 // Declares operator button.
 const operatorButton = document.getElementsByClassName("operator")
 
+let floatSize = ["0","0"]
 // Adds numbers when buttons are clicked to the results div.
 const numberPad = document.getElementsByClassName("number");
 for (let i = 0; i < numberPad.length; i++) {
   numberPad[i].onclick = function() {
     // clears results div when a second number is entered.
     if ((operator != "" || operator == "=") && clickCounter < 1) {results.textContent = ""}
-    results.textContent += `${numberPad[i].textContent}`
+
+    // Turns number to one with exponant 10 if it gets too big. 
+    if (isBig(results.textContent)) {results.textContent = expo(Number(results.textContent) + `${numberPad[i].textContent}`, 4)}
+    else {results.textContent += `${numberPad[i].textContent}`}
+
+    if (results.textContent.length > 21) {results.textContent = Number(results.textContent).toPrecision(15)}
+
     // Prevents user from clicking operator without numbers between.
     for (let i = 0; i < operatorButton.length; i++) {
       operatorButton[i].disabled = false;
@@ -107,7 +115,8 @@ function operate(operator, a, b) {
   else if (operator == "-") { answer = substract(a,b) }
   else if (operator == "*") { answer = multiply(a,b) }
   else if (operator == "/") { answer = divide(a,b) }
-  if (isFloat(answer)) {return answer.toFixed(4)}
+  if (isFloat(answer) && !isNaN(answer)) {answer = answer.toFixed(6)}
+  if (isBig(answer) && !isNaN(answer)) {answer = expo(answer, 4)}
   return answer;
 }
 
@@ -136,8 +145,19 @@ function arrayFloat(text) {
   }
 }
 
+// Checks for floats.
 function isFloat(number) {
   return number % 1 != 0;
+}
+
+// Checks for large numbers.
+function isBig(number) {
+  return number >= 10**10; 
+} 
+
+// Turns number to one with exponant 10.
+function expo(x, f) {
+  return Number.parseFloat(x).toExponential(f);
 }
 
 // Adds keyboard support.
