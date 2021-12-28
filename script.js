@@ -166,7 +166,6 @@ document.addEventListener('keydown', (event) => {
   let name = event.key;
   if ((new RegExp("Backspace")).test(name) || regexOperators.test(name)) {
     document.getElementById(`${name}`).click();
-    console.log("yo")
   }
   if (name == "Enter") {document.getElementById("=").click();}
   if (name == "c") {document.getElementById("clear").click();}
