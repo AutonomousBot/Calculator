@@ -19,8 +19,8 @@ body {
   flex-direction: column;
   align-items: center;
   background-color: grey;
-  width: 50vh;
-  height: 60vh;
+  width: 60vh;
+  height: 70vh;
   padding: 10px;
   font-size: 30px;
   border: solid black 5px;
